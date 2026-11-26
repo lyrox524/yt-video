@@ -1,0 +1,115 @@
+id,narration,kind,headline,lines
+001,A routine security update turned millions of Windows computers into machines that could not start normally. Airports lost access to check-in systems.,title,CrowdStrike Falcon incident,"July 19, 2024"
+002,Hospitals and businesses had to fall back to manual work. And the update was not a cyberattack.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+003,It was a mistake in the software meant to help stop cyberattacks.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+004,"How could a small change to a security product travel so far, so fast, and crash computers around the world?",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+005,"The answer is a chain of assumptions: a template expected one more input than the sensor actually supplied,",list,critical workflows,automatic updates | a separate backup | recovery guidance
+006,"a test never made the software inspect that input, and a live update reached many",list,critical workflows,automatic updates | a separate backup | recovery guidance
+007,"systems before the mismatch was caught. This is the July 19, 2024 CrowdStrike Falcon incident.",timeline,CrowdStrike Falcon incident,"July 19, 2024 | 04:09 UTC | 05:27 UTC"
+008,Falcon is endpoint security software: a program that watches activity on a computer and helps detect threats.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+009,The failure affected certain Windows systems running Falcon sensor version 7.11 or later when,stat,7.11 or later,Windows devices were affected | Microsoft later estimated
+010,they received a particular content update. CrowdStrike said Mac and Linux systems were not affected.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+011,"This was not malware, and there is no evidence in the company’s reports that an attacker caused the outage.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+012,"To understand the timeline, picture two kinds of updates. One changes the sensor",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+013,"program itself. Another, called Rapid Response Content, changes detection information the sensor uses.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+014,Think of the sensor as a smoke detector and the content as the rules for what patterns to watch.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+015,A content update can change quickly without replacing the whole sensor. That speed helps defenders respond to new threats.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+016,But any fast update is also a change entering a huge number of computers.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+017,"Months before the outage, CrowdStrike added a new kind of rule template for inspecting inter-process communication, or IPC.",hex,Channel File 291,Rapid Response Content
+018,That is simply how programs on a computer exchange information. The template definition described 21 possible input fields.,stat,21 possible input fields,Windows devices were affected | Microsoft later estimated
+019,But the sensor code that fed information to the template provided only 20 values. That mismatch did not immediately crash computers.,stat,20 values,Windows devices were affected | Microsoft later estimated
+020,"The rule instances used a wildcard in the final field. In plain English, the rule effectively said:",hex,Channel File 291,Rapid Response Content
+021,"“Whatever is here is fine.” Since the software did not have to compare the missing value, the defective path stayed hidden.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+022,CrowdStrike’s root-cause report says tests also missed it because they used that wildcard behavior. A second gap made the mismatch dangerous.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+023,"The content interpreter, the part of the sensor that reads the rules, had no effective bounds check for this case.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+024,A bounds check is a guard that asks whether a program is about to read beyond the data it was given.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+025,"Without that guard, an unusual rule could make the interpreter reach past the end of its list.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+026,"So the defect was dormant, but not harmless. It was waiting for a rule that exercised the field.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+027,"On July 19, CrowdStrike published new Rapid Response Content through Channel File 291.",timeline,CrowdStrike Falcon incident,"July 19, 2024 | 04:09 UTC | 05:27 UTC"
+028,"The file contained new rule instances, including one that used a specific match in the 21st field instead of a wildcard.",stat,21st field,Windows devices were affected | Microsoft later estimated
+029,That made the sensor try to examine a value it had not been given.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+030,Here is the key distinction: the content validator checked the rule against the template’s declared 21 inputs.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+031,The sensor integration code supplied 20. The validator and the running sensor were effectively checking different contracts.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+032,"The new rule passed the first check, then triggered the mismatch in the interpreter.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+033,The bad read happened inside security software running with deep access to Windows.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+034,"The result was a system crash, commonly shown as a blue screen.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+035,That means the protection tool itself could stop the computer it was supposed to protect.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+036,This is why the incident is a software reliability story as much as,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+037,a cybersecurity story: trusted security software can become a shared point of failure.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+038,"At 04:09 UTC, the content update began going to Windows hosts that were online and running the affected sensor versions.",timeline,CrowdStrike Falcon incident,"July 19, 2024 | 04:09 UTC | 05:27 UTC"
+039,"CrowdStrike’s preliminary report says systems that connected during the affected window could crash. At 05:27 UTC, the company reverted the update.",timeline,CrowdStrike Falcon incident,"July 19, 2024 | 04:09 UTC | 05:27 UTC"
+040,That is a 78-minute window from publication to reversion. But “reverted” does not mean every computer instantly recovered.,stat,78-minute window,Windows devices were affected | Microsoft later estimated
+041,"A machine that had already crashed could be stuck in a restart loop,",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+042,unable to reach the internet or load far enough for the normal update process to repair it.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+043,"In some organizations, staff had to reach each affected machine and perform recovery steps locally.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+044,The same distribution mechanism that made the update fast could not automatically help a,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+045,computer that could no longer boot far enough to receive the fix. A useful mental model is,list,critical workflows,automatic updates | a separate backup | recovery guidance
+046,a fire alarm system whose new rule makes the alarm panel reboot whenever it sees a certain signal.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+047,"Removing the rule prevents the next panel from rebooting, but the panels already locked in a restart cycle still need hands-on recovery.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+048,"A rollback is vital, but it is not the same thing as recovery.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+049,The impact spread across services that depend on Windows computers. Microsoft later estimated that 8.5,list,critical workflows,automatic updates | a separate backup | recovery guidance
+050,"million Windows devices were affected. That number is less than one percent of all Windows machines,",stat,less than one percent,Windows devices were affected | Microsoft later estimated
+051,but it still represented a huge number of endpoints connected to organizations around the world.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+052,Organizations that depended on Windows systems had to manage interruptions to business and public-facing services.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+053,"Microsoft described broad economic and societal impacts, reflecting the use of the affected software by enterprises running critical services.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+054,The exact effect varied by organization: a blue-screened staff workstation is different from an outage in a central system.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+055,The important lesson is not that every affected organization lost the same service.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+056,It is that one widely deployed software component sat on many critical workflows at once. This was not a data theft incident.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+057,"CrowdStrike described the cause as a defective content update, and its public filing said the event",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+058,was not caused by a cyberattack. That matters because “cyber incident” does not always mean an intruder.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+059,"Availability can fail through an ordinary engineering error, especially when one vendor update reaches many customers at the same time.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+060,CrowdStrike’s root-cause analysis describes several safeguards that failed together. The template had 21 fields,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+061,", while the sensor supplied 20. The interpreter lacked a runtime guard for the invalid read.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+062,"Test cases kept the last field as a wildcard, so the missing value did not get exercised.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+063,The content validator trusted the template definition instead of checking the interface actually used by the sensor.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+064,"This is a classic interface problem. One part of a system says, “I will send you 20 things.” Another says,",tree,layered defense,template definition | sensor code | content validator | bounds check
+065,"“I expect 21.” If both sides are tested only under conditions where the last thing does not matter,",list,critical workflows,automatic updates | a separate backup | recovery guidance
+066,the disagreement can survive for months. Then one perfectly ordinary change makes the hidden assumption visible. The wide release amplified the outcome.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+067,A single bad rule could affect many online machines quickly because rapid content updates are designed to move at operational speed.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+068,"Staged rollouts reduce that risk by sending a change to a small group first, checking for problems, then expanding.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+069,"CrowdStrike’s preliminary report said it would adopt canary and staggered deployment for these updates, along with stronger monitoring and more customer control.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+070,The first immediate response was to stop distributing the problematic content and revert it.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+071,"Customers then had to recover machines that could not start normally, following CrowdStrike’s guidance and, in many cases, accessing affected systems directly.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+072,This is the operational part that is easy to miss: restoring the update service and,list,critical workflows,automatic updates | a separate backup | recovery guidance
+073,restoring every endpoint are different jobs. CrowdStrike’s later root-cause summary listed changes to prevent similar failures.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+074,"It added validation for the number of input fields, additional deployment rings and",list,critical workflows,automatic updates | a separate backup | recovery guidance
+075,"acceptance checks, wider testing of template types, and bounds checking in the interpreter.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+076,It also described giving customers more control over rapid content updates and engaging outside reviewers for code and release processes.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+077,The lesson is layered defense. A compile-time check can reject a template that expects more fields than the code supplies.,tree,layered defense,template definition | sensor code | content validator | bounds check
+078,A runtime bounds check can prevent the sensor from reading beyond its input.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+079,"Tests can try specific values in every field, including cases that do not use wildcards.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+080,A staged rollout can limit the number of computers exposed before an error is noticed. None of these controls is magic alone.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+081,"Together, they make one missed assumption less likely to become a global",list,critical workflows,automatic updates | a separate backup | recovery guidance
+082,outage. There is a tempting conclusion here: just turn off automatic updates.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+083,"But security products need fresh detection content, and delaying updates can leave defenses behind new threats.",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+084,"The goal is not to freeze software. It is to control how changes are tested, released, observed,",list,critical workflows,automatic updates | a separate backup | recovery guidance
+085,and reversed—and to make recovery possible when a machine is already offline.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+086,The second surprise is that a small percentage can still mean a major event.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+087,"Microsoft’s estimate was under one percent of Windows devices, yet millions of machines across many organizations were affected. Concentration matters.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+088,"If the same component is installed across airports, clinics, offices, and retailers, one failure can cross organizational boundaries",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+089,"without any attacker moving laterally. First, turn on automatic updates for your operating system and trusted security tools,",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+090,but make sure you know how to reach the vendor’s official recovery instructions if an update causes trouble.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+091,"Do not download emergency “fixes” from random links or social posts. Second,",list,critical workflows,automatic updates | a separate backup | recovery guidance
+092,keep a backup of important personal files that is separate from your everyday computer—such as a cloud,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+093,backup with version history or an external drive you disconnect after backup.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+094,"A boot failure is not the same as data loss, but a separate backup gives you options if recovery becomes complicated.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+095,"Third, if you run a small business or manage a family’s devices,",list,critical workflows,automatic updates | a separate backup | recovery guidance
+096,"write down who to contact and how you would reach recovery guidance if your main computer cannot boot. For organizations,",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+097,ask whether critical updates can be rolled out in stages and whether you have,list,critical workflows,automatic updates | a separate backup | recovery guidance
+098,tested a recovery path that works when the affected device is offline.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+099,"The CrowdStrike outage was caused by a narrow software mismatch, but its reach came from trust, speed, and scale all lining up.",terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+100,"The lasting lesson is simple: test the edge cases, roll changes out in stages, and plan for recovery",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+101,before the screen goes blue. What single shared technology in your work or daily life would cause the biggest,list,critical workflows,automatic updates | a separate backup | recovery guidance
+102,disruption if it failed at once? Rapid Response Content exists for a real reason.,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+103,Security teams see new behavior in the wild and need detection logic to adapt without waiting for a complete software release.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+104,CrowdStrike says these channel file updates are a normal part of Falcon’s operation and may arrive several times a day.,stat,several times a day,Windows devices were affected | Microsoft later estimated
+105,The tradeoff is familiar across technology: faster response can also mean faster propagation of a defect.,terminal,blue screen,!system crash | 20 values | 21 possible input fields | bounds check
+106,"The safest design treats detection rules as software, even when they look like data.",hex,Channel File 291,Rapid Response Content
+107,"That means validating the exact structure the sensor will consume, testing boundaries and",list,critical workflows,automatic updates | a separate backup | recovery guidance
+108,"unusual inputs, watching a limited rollout for symptoms, and having a halt switch.",list,critical workflows,automatic updates | a separate backup | recovery guidance
+109,It also means separating “the content was reverted” from “every customer is back online,flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+110,".” Good incident communication needs to explain both. For people watching from outside the IT department,",list,critical workflows,automatic updates | a separate backup | recovery guidance
+111,the takeaway is that reliability depends on more than the computer sitting on your desk.,list,critical workflows,automatic updates | a separate backup | recovery guidance
+112,"It depends on the update pipeline, the vendor’s checks, the organization’s recovery plan,",flow,Rapid Response Content,sensor program itself | detection information | Windows hosts
+113,and the people who can reach a device when it stops booting. That chain,list,critical workflows,automatic updates | a separate backup | recovery guidance
+114,is invisible on an ordinary day. An incident makes it visible all at once.,list,recovery guidance,automatic updates | a separate backup | recovery guidance
