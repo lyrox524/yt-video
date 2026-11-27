@@ -1,0 +1,90 @@
+{
+  "project": "THE BANGLADESH BANK HEIST: THE $81 MILLION THAT VANISHED",
+  "status": "blocked_audio_not_generated",
+  "target_runtime": "12:45",
+  "actual_audio_duration_seconds": null,
+  "timings_are": "Editorial target windows from the approved storyboard; not measured against audio.",
+  "sections": [
+    {
+      "index": 1,
+      "title": "Cold Open: The Silent Printer",
+      "target_start": "00:00",
+      "target_end": "00:50",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 2,
+      "title": "Chapter 1: A Message That Could Move Money",
+      "target_start": "00:50",
+      "target_end": "01:55",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 3,
+      "title": "Chapter 2: Access Before the Transfers",
+      "target_start": "01:55",
+      "target_end": "03:20",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 4,
+      "title": "Chapter 3: The Orders",
+      "target_start": "03:20",
+      "target_end": "04:35",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 5,
+      "title": "Chapter 4: What the Printer Told Them",
+      "target_start": "04:35",
+      "target_end": "05:55",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 6,
+      "title": "Chapter 5: From New York to Manila",
+      "target_start": "05:55",
+      "target_end": "07:25",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 7,
+      "title": "Chapter 6: The Investigation and Attribution",
+      "target_start": "07:25",
+      "target_end": "08:40",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 8,
+      "title": "Chapter 7: Where the Defenses Failed",
+      "target_start": "08:40",
+      "target_end": "10:20",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 9,
+      "title": "Chapter 8: What Changed\u2014and What Did Not",
+      "target_start": "10:20",
+      "target_end": "11:45",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "index": 10,
+      "title": "Closing: The Missing Record",
+      "target_start": "11:45",
+      "target_end": "12:45",
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    }
+  ],
+  "caption_sync_status": "not_generated_audio_unavailable"
+}
